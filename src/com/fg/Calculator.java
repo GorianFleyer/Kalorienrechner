@@ -5,19 +5,31 @@ public class Calculator
 
 
     // Relation: x Gram * y Calories (per 100g) = xy Gram Calories / 100
+    // Knowledge of grams and calorie per 100g (Ratio)= sum
 
-    public static double GramCalories( double gram, double calories)
+    public static double Sum( double gram, double ratio)
     {
-        return gram * calories / 100;
+        return gram * ratio / 100;
     }
 
     // Reach the ratio of Calories per 100g
+    // Knowledge of calorie intake and gram intake
 
-    public static double Ratio(double gram, double calories)
+    public static double Ratio(double gram, double sum)
     {
-        return calories * 100 / gram;
+        return sum * 100 / gram;
     }
 
-    public static double
+    // Knowledge of Ratio and Calorie intake = gram
+
+    public static double Gram(double sum, double ratio)
+    {
+        return sum * 100 / ratio;
+    }
+
+    public static double AddToDailyCal(double dailycal, double addition)
+    {
+        return dailycal + addition;
+    }
 
 }
