@@ -1,5 +1,7 @@
 package com.fg;
 
+import com.con.Connect;
+
 import java.util.Scanner;
 
 public class Main {
@@ -17,6 +19,9 @@ public class Main {
         b(Calculator.Ratio(scanner.nextDouble(), scanner.nextDouble()) + "");*/
         b("Alt: 400 neu 200  ergibt "+ Calculator.AddToDailyCal(400, 200));
         scanner.close();
+
+        Connect connect = new Connect();
+        connect.connect();
     }
 
     // Faulheit
