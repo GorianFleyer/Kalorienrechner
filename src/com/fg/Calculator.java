@@ -32,4 +32,30 @@ public class Calculator
         return dailycal + addition;
     }
 
+    public static double CalorieRequired(double weight, double size, int sex, int age, double pal)
+    {
+        // Sex 1 = Male Sex 2 = Female
+        /*
+        * Körperliche Belastung 	PALWert
+Schlafen 	0,95
+Nur Sitzen oder Liegen 	1,2
+Ausschließlich sitzende Tätigkeit mit wenig oder keiner körperlichen Aktivität in der Freizeit, z.B. Büroarbeit 	1,4 – 1,5
+Sitzende Tätigkeit mit zeitweilig gehender oder stehender Tätigkeit, z.B. Studierende, Fließbandarbeiter, Laboranten, Kraftfahrer 	1,6 – 1,7
+Überwiegend gehende oder stehende Tätigkeit, z.B. Verkäufer, Kellner, Handwerker, Mechaniker, Hausfrauen 	1,8 – 1,9
+Körperlich anstrengende berufliche Arbeit 	2,0 – 2,4
+        *
+        *
+        * */
+
+
+        if(sex==1)
+        {
+            return (66.47 + (13.7 * weight) + (5 * size) - (6.8 * age)) * pal;
+        }
+        else
+        {
+            return (655.1 + (9.6 * weight) + (1.8 * size) - (4.7 * age)) * pal;
+        }
+    }
+
 }

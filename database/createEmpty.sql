@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Mo. Feb. 24 23:43:12 2020
+-- File generated with SQLiteStudio v3.2.1 on Di. Feb. 25 13:42:40 2020
 --
 -- Text encoding used: UTF-8
 --
@@ -58,6 +58,20 @@ CREATE TABLE recipe (
     id     INTEGER PRIMARY KEY AUTOINCREMENT,
     name_0 STRING,
     name_1 STRING
+);
+
+
+-- Table: refDateNutrition
+DROP TABLE IF EXISTS refDateNutrition;
+
+CREATE TABLE refDateNutrition (
+    fk_date      BIGINT REFERENCES CaloriesOnDay (id),
+    fk_nutrition        REFERENCES nutrition (id),
+    amount       REAL,
+    PRIMARY KEY (
+        fk_date COLLATE RTRIM,
+        fk_nutrition COLLATE RTRIM
+    )
 );
 
 
