@@ -3,7 +3,7 @@ package com.fg;
 public class Calculator
 {
 
-
+// @TODO Alle werte unterm Bruchstrich gegen NULL oder null prüfen
     // Relation: x Gram * y Calories (per 100g) = xy Gram Calories / 100
     // Knowledge of grams and calorie per 100g (Ratio)= sum
 

@@ -22,6 +22,8 @@ public class Main {
 
         Connect connect = new Connect();
         connect.connect();
+
+        b(Calculator.CalorieRequired(90, 178,1,29,0.95) + "");
     }
 
     // Faulheit
