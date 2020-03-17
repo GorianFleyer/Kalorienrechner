@@ -7,7 +7,7 @@ public class Calculator
     // Relation: x Gram * y Calories (per 100g) = xy Gram Calories / 100
     // Knowledge of grams and calorie per 100g (Ratio)= sum
 
-    public static double Sum( double gram, double ratio)
+    public static double Sum( double gram, double ratio) throws ArithmeticException
     {
         return gram * ratio / 100;
     }
@@ -15,16 +15,19 @@ public class Calculator
     // Reach the ratio of Calories per 100g
     // Knowledge of calorie intake and gram intake
 
-    public static double Ratio(double gram, double sum)
+    public static double Ratio(double gram, double sum) throws ArithmeticException
     {
         return sum * 100 / gram;
     }
 
     // Knowledge of Ratio and Calorie intake = gram
 
-    public static double Gram(double sum, double ratio)
+    public static double Gram(double sum, double ratio) throws ArithmeticException
     {
-        return sum * 100 / ratio;
+
+            return sum * 100 / ratio;
+
+
     }
 
     public static double AddToDailyCal(double dailycal, double addition)
@@ -57,5 +60,10 @@ Körperlich anstrengende berufliche Arbeit 	2,0 – 2,4
             return (655.1 + (9.6 * weight) + (1.8 * size) - (4.7 * age)) * pal;
         }
     }
+//https://de.wikipedia.org/wiki/Body-Mass-Index
 
+    public static double BMI(double size, double weight) throws ArithmeticException
+    {
+        return weight / (size * size);
+    }
 }
