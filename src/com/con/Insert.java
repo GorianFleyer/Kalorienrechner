@@ -22,4 +22,36 @@ public class Insert
         System.out.println(sq.getMessage());
     }
 }
+    public static void insertDayWeight(Connection conn, String date, double weight)
+    {
+        String sql = "INSERT INTO DayWeight(date,weight) Values(?,?)";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, date);
+
+            preparedStatement.setDouble(2,weight);
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException sq)
+        {
+            System.out.println(sq.getMessage());
+        }
+    }
+    public static void insertCaloriesOnDay(Connection conn, String date, double calories)
+    {
+        String sql = "INSERT INTO CaloriesOnDay(date,calorie) Values(?,?)";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, date);
+
+            preparedStatement.setDouble(2,calories);
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException sq)
+        {
+            System.out.println(sq.getMessage());
+        }
+    }
 }
