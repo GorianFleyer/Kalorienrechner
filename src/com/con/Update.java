@@ -24,4 +24,21 @@ public class Update
             System.out.println(sq.getMessage());
         }
     }
+    public static void UpdateDayWeight(Connection conn, String date, double weight)
+    {
+        String sql = "UPDATE DayWeight SET weight = ? WHERE date = ?)";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql))
+        {
+            preparedStatement.setDouble(1,weight);
+            preparedStatement.setString(2, date);
+
+
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException sq)
+        {
+            System.out.println(sq.getMessage());
+        }
+    }
 }
