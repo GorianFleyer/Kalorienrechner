@@ -151,6 +151,7 @@ public class ConsoleApp {
         int sex = 1;
         double pal = 0.0;
         double caloriesOnday = 0.0;
+
         try {
             if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
                 weight = Double.parseDouble(Select.SelectFromDayWeight(connect.connect()).get(localDate.toString()));
