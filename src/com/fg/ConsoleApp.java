@@ -154,7 +154,8 @@ public class ConsoleApp {
 
         try {
             if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
-                weight = Double.parseDouble(Select.SelectFromDayWeight(connect.connect()).get(localDate.toString()));
+
+                weight = (double) Select.SelectFromDayWeight(connect.connect()).get(localDate.toString());
                 System.out.println("Der für heute eingetragene Wert ist: " + weight + "\nVerwenden?[y/n]");
                 input = scanner.next();
                 if (input.equals("y")) {
@@ -173,7 +174,7 @@ public class ConsoleApp {
             size = scanner.nextDouble();
             System.out.println("Sind Sie \n 1. ein Mann \n 2. eine Frau\nBitte einzelne Zahlen eingeben");
             sex = scanner.nextInt();
-            System.out.printf("Wie viele Jahre sind sie alt?");
+            System.out.println("Wie viele Jahre sind sie alt?");
             age = scanner.nextInt();
             System.out.println("Was ist ihr PALWert?");
             System.out.println("Schlafen =	0,95");
@@ -186,7 +187,7 @@ public class ConsoleApp {
                     "\n =	1,8 – 1,9");
             System.out.println("Körperlich anstrengende berufliche Arbeit =	2,0 – 2,4");
             pal = scanner.nextDouble();
-            caloriesOnday = Calculator.CalorieRequired(weight,size,sex,age,pal );
+            caloriesOnday = Calculator.CalorieRequired(weight,size,sex,age,pal);
             System.out.println("Der Kalorienverbrauch pro Tag liegt bei " + caloriesOnday + " Kalorien am Tag");
             if(!weightExistedBefore)
             {
@@ -224,7 +225,7 @@ public class ConsoleApp {
         double BMI = 0.0;
         try {
             if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
-                weight = Double.parseDouble(Select.SelectFromDayWeight(connect.connect()).get(localDate.toString()));
+                weight = (double)Select.SelectFromDayWeight(connect.connect()).get(localDate.toString());
                 System.out.println("Der für heute eingetragene Wert ist: " + weight + "\nVerwenden?[y/n]");
                 input = scanner.next();
                 if (input.equals("y")) {
@@ -239,8 +240,8 @@ public class ConsoleApp {
             }
             System.out.println("Wie groß sind Sie? (in cm)");
             size = scanner.nextDouble();
-            BMI = Calculator.BMI(size,weight);
-            System.out.printf("Ihr BMI ist" + BMI);
+            BMI = Calculator.BMI(size,weight*10000);
+            System.out.println("Ihr BMI ist " + BMI);
 
             if (!weightExistedBefore) {
                 System.out.println("Gewicht übernehmen?[y/n]");

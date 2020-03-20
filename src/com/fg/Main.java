@@ -16,6 +16,7 @@ public class Main {
         LocalDate now = LocalDate.now();
 
 
+
         ConsoleApp consoleApp = new ConsoleApp(now);
 
     }
