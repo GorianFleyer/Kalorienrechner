@@ -13,7 +13,6 @@ public class Connect
         {
             String url = "jdbc:sqlite:database/database";
             conn = DriverManager.getConnection(url);
-            System.out.println("Connection to sql has been established!");
         }
         catch (SQLException e)
         {

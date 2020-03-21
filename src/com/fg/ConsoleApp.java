@@ -6,6 +6,7 @@ import com.con.Select;
 import com.con.Update;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ConsoleApp {
@@ -33,10 +34,10 @@ public class ConsoleApp {
                 switch (scan) {
 
                     case 1:
-                        System.out.println("Nicht Implementiert");
+                        ListCalories(connect);
                         break;
                     case 2:
-                        System.out.println("Nicht Implementiert");
+                        ListWeight(connect);
                         break;
                     case 3:
                         BMIBerechnen(localDate, connect);
@@ -61,7 +62,7 @@ public class ConsoleApp {
 
         } while (scan != 0);
     }
-
+    // Set's the weight on a certain amount for a day
     public static void UpdateWeight(LocalDate localDate, Connect connect) {
         String input = "";
         Scanner scanner = new Scanner(System.in);
@@ -80,7 +81,7 @@ public class ConsoleApp {
         }
 
     }
-
+    // Adds plain calories to the daily  amount
     public static void UpdateCalories(LocalDate localDate, Connect connect) {
         String input = "";
         String choice = "y";
@@ -105,7 +106,7 @@ public class ConsoleApp {
         }
 
     }
-
+    // Calculates the amount of eaten calories and asks for an update to the daily calorie counter
     public static void CalculateCalories(LocalDate localDate, Connect connect) {
         String rate = "";
         String gram = "";
@@ -141,6 +142,8 @@ public class ConsoleApp {
         }
     }
 
+    // Asks for the weight, sex, age, size and pal and gives back the  amount of calories the body
+    // needs on a normal day and how many are still edible
     public static void CalcCalorie(LocalDate localDate, Connect connect) {
         Scanner scanner = new Scanner(System.in);
         boolean weightExistedBefore = false;
@@ -151,6 +154,7 @@ public class ConsoleApp {
         int sex = 1;
         double pal = 0.0;
         double caloriesOnday = 0.0;
+        double difference = 0.0;
 
         try {
             if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
@@ -188,7 +192,9 @@ public class ConsoleApp {
             System.out.println("Körperlich anstrengende berufliche Arbeit =	2,0 – 2,4");
             pal = scanner.nextDouble();
             caloriesOnday = Calculator.CalorieRequired(weight,size,sex,age,pal);
+            difference = caloriesOnday -(double) Select.SelectFromCaloriesOnDay(connect.connect()).get(localDate.toString()) ;
             System.out.println("Der Kalorienverbrauch pro Tag liegt bei " + caloriesOnday + " Kalorien am Tag");
+            System.out.println("Sie können noch " + difference + " Kalorien zu sich nehmen.");
             if(!weightExistedBefore)
             {
                 System.out.println("Gewicht übernehmen?[y/n]");
@@ -213,6 +219,7 @@ public class ConsoleApp {
             System.out.println(e.getMessage());
         }
     }
+    // Calculates the BMI based on size and weight and wants to update it to the table
     public static void BMIBerechnen(LocalDate localDate, Connect connect) {
         Scanner scanner = new Scanner(System.in);
         boolean weightExistedBefore = false;
@@ -263,6 +270,22 @@ public class ConsoleApp {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+    // Lists the Calorie Input on all input dates
+    public static void ListCalories(Connect connect)
+    {
+        HashMap<String, Double> temp = Select.SelectFromCaloriesOnDay(connect.connect());
+        for (String i : temp.keySet()) {
+            System.out.println("Datum: " + i + " Kalorien: " + temp.get(i));
+        }
+    }
+    // Lists the Weight on all input dates
+    public static void ListWeight(Connect connect)
+    {
+        HashMap<String, Double> temp = Select.SelectFromDayWeight(connect.connect());
+        for (String i : temp.keySet()) {
+            System.out.println("Datum: " + i + " Gewicht: " + temp.get(i));
         }
     }
 }
