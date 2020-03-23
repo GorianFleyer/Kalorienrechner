@@ -192,8 +192,14 @@ public class ConsoleApp {
             System.out.println("Körperlich anstrengende berufliche Arbeit =	2,0 – 2,4");
             pal = scanner.nextDouble();
             caloriesOnday = Calculator.CalorieRequired(weight,size,sex,age,pal);
-            difference = caloriesOnday -(double) Select.SelectFromCaloriesOnDay(connect.connect()).get(localDate.toString()) ;
+            if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
+
+                Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), 0.0);
+            }
+
+            difference = caloriesOnday - (double) Select.SelectFromCaloriesOnDay(connect.connect()).get(localDate.toString());
             System.out.println("Der Kalorienverbrauch pro Tag liegt bei " + caloriesOnday + " Kalorien am Tag");
+
             System.out.println("Sie können noch " + difference + " Kalorien zu sich nehmen.");
             if(!weightExistedBefore)
             {

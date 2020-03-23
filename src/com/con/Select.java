@@ -50,7 +50,7 @@ public class Select {
     }
     public static HashMap SelectFromCaloriesOnDay(Connection conn) {
         String sql = "SELECT date, calorie "
-                + "FROM CaloriesOnDay";
+                + "FROM CaloriesOnDay order by ID";
 
         HashMap<String, Double> hashMap = new HashMap();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
