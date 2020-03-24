@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Di. Feb. 25 13:42:40 2020
+-- File generated with SQLiteStudio v3.2.1 on Di. März 24 18:43:52 2020
 --
 -- Text encoding used: UTF-8
 --
@@ -48,6 +48,20 @@ CREATE TABLE nutrition (
     name_0           STRING,
     name_1           STRING,
     recomendedAmount INTEGER
+);
+
+
+-- Table: profile
+DROP TABLE IF EXISTS profile;
+
+CREATE TABLE profile (
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    login    STRING  NOT NULL,
+    password STRING,
+    size     REAL,
+    pal      REAL,
+    birthday STRING,
+    age      INTEGER
 );
 
 
@@ -100,6 +114,18 @@ CREATE TABLE refNutritionIngridient (
         fk_ingridient COLLATE RTRIM,
         fk_nutrition COLLATE RTRIM
     )
+);
+
+
+-- Table: tupper
+DROP TABLE IF EXISTS tupper;
+
+CREATE TABLE tupper (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    calories     INTEGER,
+    fullWeight   REAL,
+    tupperWeight REAL,
+    date         STRING
 );
 
 

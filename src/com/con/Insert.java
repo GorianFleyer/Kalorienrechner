@@ -54,4 +54,21 @@ public class Insert
             System.out.println(sq.getMessage());
         }
     }
+    public static void insertTupper(Connection conn, String date, double calories, double fullweight, double tupperweight)
+    {
+        String sql = "INSERT INTO tupper(date,calories,fullweight,tupperweight) Values(?,?,?,?)";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, date);
+            preparedStatement.setDouble(2,calories);
+            preparedStatement.setDouble(3,fullweight);
+            preparedStatement.setDouble(4,tupperweight);
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException sq)
+        {
+            System.out.println(sq.getMessage());
+        }
+    }
 }

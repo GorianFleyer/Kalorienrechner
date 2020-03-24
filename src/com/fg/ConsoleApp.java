@@ -4,9 +4,12 @@ import com.con.Connect;
 import com.con.Insert;
 import com.con.Select;
 import com.con.Update;
+import com.functions.TupperCalc;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleApp {
@@ -14,7 +17,12 @@ public class ConsoleApp {
         int scan = 0;
         Scanner scanner = new Scanner(System.in);
         Connect connect = new Connect();
+        List<double[]> tupper = Select.SelectFromTupper(connect.connect());
+        for (double[] i:tupper) {
+            System.out.println("Tupper mit " + i[0] + "Kalorien auf " + i[1] + "g enthält noch " + i[2] + " Gramm" );
+            System.out.println("Das sind " + TupperCalc.CalcTupper(i[0],i[1],i[2]) + " Kalorien");
 
+        }
         do {
             System.out.println("Kalorienrechner Hauptmenue");
             System.out.println("##########################");
@@ -25,6 +33,7 @@ public class ConsoleApp {
             System.out.println("5. Tagesgewicht eintragen");
             System.out.println("6. Kalorien für den Tag eintragen");
             System.out.println("7. Kalorien berechnen");
+            System.out.println("8. Tuppern");
             System.out.println();
             System.out.println("0. Ende");
 
@@ -53,6 +62,9 @@ public class ConsoleApp {
                         break;
                     case 7:
                         CalculateCalories(localDate, connect);
+                        break;
+                    case 8:
+                        Tuppern(connect,localDate);
                         break;
                 }
             } catch (Exception e) {
@@ -281,7 +293,7 @@ public class ConsoleApp {
     // Lists the Calorie Input on all input dates
     public static void ListCalories(Connect connect)
     {
-        HashMap<String, Double> temp = Select.SelectFromCaloriesOnDay(connect.connect());
+        LinkedHashMap<String, Double> temp = Select.SelectFromCaloriesOnDay(connect.connect());
         for (String i : temp.keySet()) {
             System.out.println("Datum: " + i + " Kalorien: " + temp.get(i));
         }
@@ -289,9 +301,83 @@ public class ConsoleApp {
     // Lists the Weight on all input dates
     public static void ListWeight(Connect connect)
     {
-        HashMap<String, Double> temp = Select.SelectFromDayWeight(connect.connect());
+        LinkedHashMap<String, Double> temp = Select.SelectFromDayWeight(connect.connect());
         for (String i : temp.keySet()) {
             System.out.println("Datum: " + i + " Gewicht: " + temp.get(i));
         }
+    }
+    public static void Tuppern(Connect connect, LocalDate localDate)
+    {
+        String rate = "";
+        String gram = "";
+        String choice = "y";
+        double calories = 0.0;
+        double counter = 0.0;
+        double fullweight = 0.0;
+        double tupperweight = 0.0;
+        double tupperCalories = 0.0;
+        Scanner scanner = new Scanner(System.in);
+        do {
+            System.out.println("Wie viel Kalorien haben haben 100g?");
+            System.out.print("Kalorien: ");
+            rate = scanner.next();
+            System.out.println("Wie viel haben Sie gegessen?");
+            gram = scanner.next();
+            try {
+                calories = Calculator.Sum(Double.parseDouble(gram), Double.parseDouble(rate));
+                System.out.println("Das sind " + calories + " Kalorien. \n In die Tupper? [y/n]");
+                choice = scanner.next();
+                if (choice.equals("y")) {
+                counter += calories;
+
+
+                }
+                System.out.println("Neue Berechnung? [y/n]");
+                choice = scanner.next();
+
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        while (!choice.equals("y"));
+
+        try {
+            System.out.println("Wie viel haben Sie davon gegessen?");
+            fullweight = scanner.nextDouble();
+            System.out.println("Wie viel haben Sie getuppert?");
+            tupperweight = scanner.nextDouble();
+            fullweight += tupperweight;
+            tupperCalories = TupperCalc.CalcTupper(counter,fullweight,tupperweight);
+            System.out.println("Das sind " + tupperCalories + " Kalorien. Auf den Tageswert?[y/n]");
+            choice = scanner.next();
+            if (choice.equals("y")) {
+
+
+                if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
+                    Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), calories);
+                } else {
+                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), calories);
+                }
+            }
+            System.out.println("Den Rest in die Tupper?");
+            choice = scanner.next();
+            if (choice.equals("y")) {
+
+                    Insert.insertTupper(connect.connect(), localDate.toString(), calories,fullweight, tupperweight);
+
+            }
+            System.out.println("Neue Tupper? [y/n]");
+            choice = scanner.next();
+            if (choice.equals("y")) {
+                Tuppern(connect,localDate);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+
     }
 }

@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Select {
     public static void SelectFromIngridients(Connection conn) {
@@ -27,11 +30,11 @@ public class Select {
 
 
     }
-    public static HashMap SelectFromDayWeight(Connection conn) {
+    public static LinkedHashMap SelectFromDayWeight(Connection conn) {
         String sql = "SELECT date, weight "
                 + "FROM DayWeight";
 
-        HashMap<String, Double> hashMap = new HashMap();
+        LinkedHashMap<String, Double> hashMap = new LinkedHashMap();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -48,11 +51,11 @@ public class Select {
         return hashMap;
 
     }
-    public static HashMap SelectFromCaloriesOnDay(Connection conn) {
+    public static LinkedHashMap SelectFromCaloriesOnDay(Connection conn) {
         String sql = "SELECT date, calorie "
                 + "FROM CaloriesOnDay order by ID";
 
-        HashMap<String, Double> hashMap = new HashMap();
+        LinkedHashMap<String, Double> hashMap = new LinkedHashMap();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -67,6 +70,31 @@ public class Select {
 
         }
         return hashMap;
+
+    }
+    public static List<double[]> SelectFromTupper(Connection conn) {
+        String sql = "SELECT calories, fullweight, tupperweight "
+                + "FROM tupper order by ID";
+
+        List<double[]> tupperList = new ArrayList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+            int listCount = 0;
+            while (rs.next()) {
+
+                double[] temp = {rs.getDouble("calories"), rs.getDouble("fullweight"), rs.getDouble("tupperweight")};
+                tupperList.add(temp);
+
+
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return tupperList;
 
     }
 }
