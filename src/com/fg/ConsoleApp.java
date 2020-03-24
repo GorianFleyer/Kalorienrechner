@@ -34,6 +34,7 @@ public class ConsoleApp {
             System.out.println("6. Kalorien für den Tag eintragen");
             System.out.println("7. Kalorien berechnen");
             System.out.println("8. Tuppern");
+            System.out.println("9. Bier");
             System.out.println();
             System.out.println("0. Ende");
 
@@ -66,6 +67,8 @@ public class ConsoleApp {
                     case 8:
                         Tuppern(connect,localDate);
                         break;
+                    case 9:
+                        Beer(connect,localDate);
                 }
             } catch (Exception e) {
                 System.out.println("Falsche Eingabe");
@@ -340,7 +343,7 @@ public class ConsoleApp {
                 System.out.println(e.getMessage());
             }
         }
-        while (!choice.equals("y"));
+        while (choice.equals("y"));
 
         try {
             System.out.println("Wie viel haben Sie davon gegessen?");
@@ -349,22 +352,24 @@ public class ConsoleApp {
             tupperweight = scanner.nextDouble();
             fullweight += tupperweight;
             tupperCalories = TupperCalc.CalcTupper(counter,fullweight,tupperweight);
-            System.out.println("Das sind " + tupperCalories + " Kalorien. Auf den Tageswert?[y/n]");
+            System.out.println("Die Gesamte Mahlzeit hat " + counter + " Kalorien");
+            System.out.println("Heute haben Sie " + tupperCalories + " Kalorien gegessen. Auf den Tageswert?[y/n]");
+
             choice = scanner.next();
             if (choice.equals("y")) {
 
 
                 if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
-                    Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), calories);
+                    Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), tupperCalories);
                 } else {
-                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), calories);
+                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), tupperCalories);
                 }
             }
             System.out.println("Den Rest in die Tupper?");
             choice = scanner.next();
             if (choice.equals("y")) {
 
-                    Insert.insertTupper(connect.connect(), localDate.toString(), calories,fullweight, tupperweight);
+                    Insert.insertTupper(connect.connect(), localDate.toString(), counter,fullweight, tupperweight);
 
             }
             System.out.println("Neue Tupper? [y/n]");
@@ -379,5 +384,31 @@ public class ConsoleApp {
         }
 
 
+    }
+    public static void Beer(Connect connect, LocalDate localDate)
+    {
+        double beer;
+        String choice ="";
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Wie viel Bier?");
+        try{
+            beer = scanner.nextDouble();
+            beer = beer * 215.0;
+            System.out.println(beer + " Kalorien hinzufügen?[y/n}");
+            choice = scanner.next();
+            if (choice.equals("y")) {
+
+
+                if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
+                    Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), beer);
+                } else {
+                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), beer);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 }
