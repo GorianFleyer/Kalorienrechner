@@ -71,4 +71,22 @@ public class Insert
             System.out.println(sq.getMessage());
         }
     }
+    public static void insertProfile(Connection conn, String login, double size, double pal, double age,int sex)
+    {
+        String sql = "INSERT INTO profile(login,size,pal,age,sex) Values(?,?,?,?,?)";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, login);
+            preparedStatement.setDouble(2,size);
+            preparedStatement.setDouble(3,pal);
+            preparedStatement.setDouble(4,age);
+            preparedStatement.setDouble(5,sex);
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException sq)
+        {
+            System.out.println(sq.getMessage());
+        }
+    }
 }

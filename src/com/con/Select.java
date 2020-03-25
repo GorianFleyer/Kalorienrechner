@@ -97,4 +97,30 @@ public class Select {
         return tupperList;
 
     }
+    public static LinkedHashMap<String, double[]>  SelectFromprofile(Connection conn) {
+        String sql = "SELECT login, size, pal,age,sex  "
+                + "FROM profile order by ID";
+
+
+        LinkedHashMap<String, double[]> profile = new LinkedHashMap<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+
+                double[] temp = {rs.getDouble("size"), rs.getDouble("pal"), rs.getDouble("age"),rs.getDouble("sex")};
+
+                profile.put(rs.getString("login"), temp);
+
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return profile;
+
+    }
 }

@@ -4,13 +4,12 @@ import com.con.Connect;
 import com.con.Insert;
 import com.con.Select;
 import com.con.Update;
+import com.functions.ProfileCalculator;
 import com.functions.TupperCalc;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ConsoleApp {
     public ConsoleApp(LocalDate localDate) {
@@ -21,6 +20,12 @@ public class ConsoleApp {
         for (double[] i:tupper) {
             System.out.println("Tupper mit " + i[0] + "Kalorien auf " + i[1] + "g enthält noch " + i[2] + " Gramm" );
             System.out.println("Das sind " + TupperCalc.CalcTupper(i[0],i[1],i[2]) + " Kalorien");
+
+        }
+        LinkedHashMap<String, double[]>  profile = Select.SelectFromprofile(connect.connect());
+        for (String i : profile.keySet()) {
+            System.out.println("Eingetragenes Profil: " + i + " Größe: " + profile.get(i)[0]);
+            System.out.println("Pal-Wert: " +profile.get(i)[1] + "\nAlter: " + profile.get(i)[2]);
 
         }
         do {
@@ -35,6 +40,8 @@ public class ConsoleApp {
             System.out.println("7. Kalorien berechnen");
             System.out.println("8. Tuppern");
             System.out.println("9. Bier");
+            System.out.println("10. Account anlegen");
+            System.out.println("11. Aufstellung Kalorien");
             System.out.println();
             System.out.println("0. Ende");
 
@@ -69,6 +76,12 @@ public class ConsoleApp {
                         break;
                     case 9:
                         Beer(connect,localDate);
+                    case 10:
+                        System.out.println("Nicht implementiert");
+                        break;
+                    case 11:
+                        DifferenceCalories(connect,  localDate);
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println("Falsche Eingabe");
@@ -163,14 +176,20 @@ public class ConsoleApp {
         Scanner scanner = new Scanner(System.in);
         boolean weightExistedBefore = false;
         String input = "";
+        String profilName = "";
         double weight = 0.0;
         double size = 0.0;
         int age = 0;
         int sex = 1;
+        int profileCount = 0;
         double pal = 0.0;
-        double caloriesOnday = 0.0;
-        double difference = 0.0;
 
+        LinkedList<Integer> ageList = new LinkedList<Integer>();
+        LinkedList<Integer> sexList = new LinkedList<Integer>();
+        LinkedList<Double> palList = new LinkedList<Double>();
+        LinkedList<Double> sizeList = new LinkedList<Double>();
+        LinkedList<Double> weightList = new LinkedList<Double>();
+        LinkedList<String> nameList = new LinkedList<String>();
         try {
             if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
 
@@ -189,33 +208,50 @@ public class ConsoleApp {
                 System.out.println("Wie viel wiegen Sie?");
                 weight = scanner.nextDouble();
             }
-            System.out.println("Wie groß sind Sie? (in cm)");
-            size = scanner.nextDouble();
-            System.out.println("Sind Sie \n 1. ein Mann \n 2. eine Frau\nBitte einzelne Zahlen eingeben");
-            sex = scanner.nextInt();
-            System.out.println("Wie viele Jahre sind sie alt?");
-            age = scanner.nextInt();
-            System.out.println("Was ist ihr PALWert?");
-            System.out.println("Schlafen =	0,95");
-            System.out.println("Nur Sitzen oder Liegen =	1,2");
-            System.out.println("Ausschließlich sitzende Tätigkeit mit wenig oder keiner körperlichen Aktivität in der Freizeit, z.B. Büroarbeit" +
-                    "\n =	1,4 – 1,5");
-            System.out.println("Sitzende Tätigkeit mit zeitweilig gehender oder stehender Tätigkeit, z.B. Studierende, Fließbandarbeiter, Laboranten, Kraftfahrer" +
-                    "\n =	1,6 – 1,7");
-            System.out.println("Überwiegend gehende oder stehende Tätigkeit, z.B. Verkäufer, Kellner, Handwerker, Mechaniker, Hausfrauen" +
-                    "\n =	1,8 – 1,9");
-            System.out.println("Körperlich anstrengende berufliche Arbeit =	2,0 – 2,4");
-            pal = scanner.nextDouble();
-            caloriesOnday = Calculator.CalorieRequired(weight,size,sex,age,pal);
-            if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
+            LinkedHashMap<String, double[]>  profile = Select.SelectFromprofile(connect.connect());
+            for (String i : profile.keySet()) {
+                System.out.println("Eingetragenes Profil: " + i + " Größe: " + profile.get(i)[0]);
+                System.out.println("Pal-Wert: " +profile.get(i)[1] + "\nAlter: " + profile.get(i)[2]);
+                nameList.add(i);
+                sizeList.add(profile.get(i)[0]);
+                palList.add(profile.get(i)[1]);
+                ageList.add((int)profile.get(i)[2]);
+                sexList.add((int)profile.get(i)[3]);
+                profileCount++;
 
-                Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), 0.0);
+            }
+            if(profileCount == 0) {
+                System.out.println("Wie groß sind Sie? (in cm)");
+                size = scanner.nextDouble();
+                System.out.println("Sind Sie \n 1. ein Mann \n 2. eine Frau\nBitte einzelne Zahlen eingeben");
+                sex = scanner.nextInt();
+                System.out.println("Wie viele Jahre sind sie alt?");
+                age = scanner.nextInt();
+                System.out.println("Was ist ihr PALWert?");
+                System.out.println("Schlafen =	0,95");
+                System.out.println("Nur Sitzen oder Liegen =	1,2");
+                System.out.println("Ausschließlich sitzende Tätigkeit mit wenig oder keiner körperlichen Aktivität in der Freizeit, z.B. Büroarbeit" +
+                        "\n =	1,4 – 1,5");
+                System.out.println("Sitzende Tätigkeit mit zeitweilig gehender oder stehender Tätigkeit, z.B. Studierende, Fließbandarbeiter, Laboranten, Kraftfahrer" +
+                        "\n =	1,6 – 1,7");
+                System.out.println("Überwiegend gehende oder stehende Tätigkeit, z.B. Verkäufer, Kellner, Handwerker, Mechaniker, Hausfrauen" +
+                        "\n =	1,8 – 1,9");
+                System.out.println("Körperlich anstrengende berufliche Arbeit =	2,0 – 2,4");
+                pal = scanner.nextDouble();
+                ProfileCalculator.Calc(connect,localDate,weight,size,sex,age,pal);
+            }
+            else
+            {
+                for(String i:nameList)
+                {
+                    int k = nameList.indexOf(i);
+
+                    System.out.println("Für den Account " + i + " gilt:");
+                    ProfileCalculator.Calc(connect,localDate,weightList.get(k),sizeList.get(k),sexList.get(k),ageList.get(k),palList.get(k));
+
+                }
             }
 
-            difference = caloriesOnday - (double) Select.SelectFromCaloriesOnDay(connect.connect()).get(localDate.toString());
-            System.out.println("Der Kalorienverbrauch pro Tag liegt bei " + caloriesOnday + " Kalorien am Tag");
-
-            System.out.println("Sie können noch " + difference + " Kalorien zu sich nehmen.");
             if(!weightExistedBefore)
             {
                 System.out.println("Gewicht übernehmen?[y/n]");
@@ -235,7 +271,22 @@ public class ConsoleApp {
 
                 }
             }
+            if(profileCount == 0) {
+                System.out.println("Es wurden die Werte:\n"
+                        + "Größe: " + size
+                        + "\nGeschlecht: " + sex + "(Mann 1, Frau 2)"
+                        + "\nAlter: " + age
+                        + "\nPal-Wert: " + pal
+                        + "\nEintragen[y/n]"
+                );
+                input = scanner.next();
+                if (input.equals("y")) {
+                    System.out.print("Profil Name: ");
+                    profilName = scanner.next();
+                    Insert.insertProfile(connect.connect(), profilName, size,pal, age,sex);
 
+                }
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -404,6 +455,89 @@ public class ConsoleApp {
                 } else {
                     Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), beer);
                 }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+    public static void DifferenceCalories(Connect connect, LocalDate localDate) {
+        try {
+            LinkedHashMap<String, Double> calories = Select.SelectFromCaloriesOnDay(connect.connect());
+            LinkedHashMap<String, Double> weight = Select.SelectFromDayWeight(connect.connect());
+            LinkedHashMap<String, double[]> profile = Select.SelectFromprofile(connect.connect());
+
+            LinkedList<String> profilList = new LinkedList<String>();
+            LinkedList<String> dateList = new LinkedList<String>();
+            Scanner scanner = new Scanner(System.in);
+            double caloriesOnday = 0.0;
+            double difference = 0.0;
+            double defizitCounter=0.0;
+            int profileCounter = 0;
+            String input = "";
+            int inputInt = 0;
+            String p = "";
+            double weightdifference = 0.0;
+
+            for (String i : weight.keySet()) {
+                if (!calories.containsKey(i)) {
+                    System.out.println("Die Berechnung ist nur bei vollständiger Datenlage möglich. Es sind noch keine Kalorien eingetragen");
+                    System.out.println("Eintragen?[y/n]");
+                    input = scanner.next();
+                    if (input.equals("y")) {
+                        Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), 0.0);
+                    } else {
+                        return;
+                    }
+                }
+
+                for (String k : calories.keySet()) {
+
+                    if (!weight.containsKey(k)) {
+                        System.out.println("Die Berechnung ist nur bei vollständiger Datenlage möglich");
+                        return;
+                    }
+
+                }
+
+                dateList.add(i);
+
+
+            }
+            for (String j : profile.keySet()) {
+                System.out.println(profileCounter + ". Profil. Name: " + j);
+                profilList.add(j);
+                profileCounter++;
+
+            }
+            if (profileCounter == 0) {
+                System.out.println("Bitte vorher ein Profil eintragen");
+                return;
+            }
+            else
+                {
+                System.out.print("Bitte Profil auswählen: ");
+                inputInt = scanner.nextInt();
+                System.out.println("Datum\t\t\tVerbrauch\tGegessen\tDifferenz");
+                for (int i = 0; i < dateList.size(); i++)
+                {
+                    p = dateList.get(i);
+                caloriesOnday = Calculator.CalorieRequired(weight.get(p), profile.get(profilList.get(inputInt))[0],
+                        (int)profile.get(profilList.get(inputInt))[1], (int)profile.get(profilList.get(inputInt))[2],
+                        profile.get(profilList.get(inputInt))[3]);
+
+                difference = caloriesOnday - calories.get(p);
+                System.out.println(  p +" \t\t" + Math.round(caloriesOnday) + "\t\t" + Math.round(calories.get(p)) +"\t\t" + Math.round(difference));
+                defizitCounter += difference;
+
+
+            }
+                weightdifference = weight.get(dateList.getFirst()) - weight.get(dateList.getLast());
+                weightdifference = Math.round(weightdifference);
+                    System.out.println("Kaloriendefizit im Zeitraum: " + Math.round(defizitCounter));
+                    System.out.println("Das müssten:" + Calculator.calorietoFat(defizitCounter) + "kg abnahme sein");
+                    System.out.println("Tatsächlicher Gewichtsverlust: " + weightdifference + "kg" );
             }
         }
         catch (Exception e)

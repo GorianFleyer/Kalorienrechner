@@ -66,4 +66,8 @@ Körperlich anstrengende berufliche Arbeit 	2,0 – 2,4
     {
         return weight / (size * size);
     }
+    public static double calorietoFat(double calorie)
+    {
+        return calorie / 7000;
+    }
 }
