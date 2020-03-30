@@ -73,7 +73,7 @@ public class Select {
 
     }
     public static List<double[]> SelectFromTupper(Connection conn) {
-        String sql = "SELECT calories, fullweight, tupperweight "
+        String sql = "SELECT ID,calories, fullweight, tupperweight "
                 + "FROM tupper order by ID";
 
         List<double[]> tupperList = new ArrayList<>();
@@ -83,7 +83,7 @@ public class Select {
             int listCount = 0;
             while (rs.next()) {
 
-                double[] temp = {rs.getDouble("calories"), rs.getDouble("fullweight"), rs.getDouble("tupperweight")};
+                double[] temp = {rs.getDouble("calories"), rs.getDouble("fullweight"), rs.getDouble("tupperweight"), rs.getDouble("ID")};
                 tupperList.add(temp);
 
 

@@ -66,8 +66,19 @@ Körperlich anstrengende berufliche Arbeit 	2,0 – 2,4
     {
         return weight / (size * size);
     }
+
     public static double calorietoFat(double calorie)
     {
         return calorie / 7000;
+    }
+
+    public static double FatToCalories(double fat)
+    {
+        return fat * 7000;
+    }
+    // Estimates a new PAL
+    public static double PAL(double estimatedCalories,double calculatedCalories, double oldPal)
+    {
+        return estimatedCalories * oldPal / calculatedCalories;
     }
 }
