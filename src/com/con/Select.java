@@ -1,13 +1,13 @@
 package com.con;
 
+import com.SpecialObjects.BMI;
+import com.SpecialObjects.Ingredient;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class Select {
     public static void SelectFromIngridients(Connection conn) {
@@ -31,16 +31,16 @@ public class Select {
 
     }
     public static LinkedHashMap SelectFromDayWeight(Connection conn) {
-        String sql = "SELECT date, weight "
+        String sql = "SELECT dateInt, weight "
                 + "FROM DayWeight";
 
-        LinkedHashMap<String, Double> hashMap = new LinkedHashMap();
+        LinkedHashMap<Integer, Double> hashMap = new LinkedHashMap();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
 
             while (rs.next()) {
-               hashMap.put(rs.getString("date"),rs.getDouble("weight"));
+               hashMap.put(rs.getInt("dateInt"),rs.getDouble("weight"));
 
             }
 
@@ -52,16 +52,16 @@ public class Select {
 
     }
     public static LinkedHashMap SelectFromCaloriesOnDay(Connection conn) {
-        String sql = "SELECT date, calorie "
+        String sql = "SELECT dateInt, calorie "
                 + "FROM CaloriesOnDay order by ID";
 
-        LinkedHashMap<String, Double> hashMap = new LinkedHashMap();
+        LinkedHashMap<Integer, Double> hashMap = new LinkedHashMap();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
 
             while (rs.next()) {
-                hashMap.put(rs.getString("date"),rs.getDouble("calorie"));
+                hashMap.put(rs.getInt("dateInt"),rs.getDouble("calorie"));
 
             }
 
@@ -121,6 +121,76 @@ public class Select {
 
         }
         return profile;
+
+    }
+    public static LinkedHashMap<Integer, Double>  SelectFromAdditionalCalories(Connection conn) {
+        String sql = "SELECT date, calories  "
+                + "FROM AdditionalCaloriesBurned order by ID";
+
+
+        LinkedHashMap<Integer, Double> additionalCalories = new LinkedHashMap<Integer,Double>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+                additionalCalories.put(rs.getInt(1),rs.getDouble(2));
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return additionalCalories;
+
+    }
+
+    public static LinkedList<Ingredient>  SelectFromIngridient(Connection conn) {
+        String sql = "SELECT name_0, name_1, calories  "
+                + "FROM ingridient order by ID";
+
+
+        LinkedList<Ingredient> ingridients = new LinkedList<>();
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+            int count = 0;
+            while (rs.next()) {
+
+
+                ingridients.add(new Ingredient(count,rs.getString(1),rs.getString(2),rs.getDouble(3)));
+                count++;
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return ingridients;
+
+    }
+    public static LinkedList<BMI> SelectBMIAdult(Connection conn) {
+        String sql = "SELECT name_0, name_1, BMI "
+                + "FROM BMIAdult order by ID";
+
+        LinkedList<BMI> BMIs = new LinkedList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+                BMIs.add(new BMI(rs.getString(1),rs.getString(2),rs.getDouble(3)));
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return BMIs;
 
     }
 }

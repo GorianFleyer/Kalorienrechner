@@ -62,9 +62,16 @@ Körperlich anstrengende berufliche Arbeit 	2,0 – 2,4
     }
 //https://de.wikipedia.org/wiki/Body-Mass-Index
 
+    // BMI = weight / size²
+    // weight = BMI * size²
+
     public static double BMI(double size, double weight) throws ArithmeticException
     {
         return weight / (size * size);
+    }
+    public static double AimedWeight(double size, double BMI) throws ArithmeticException
+    {
+        return BMI * (size * size);
     }
 
     public static double calorietoFat(double calorie)

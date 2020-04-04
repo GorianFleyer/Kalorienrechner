@@ -2,6 +2,7 @@ package com.fg;
 
 import com.con.*;
 import com.functions.Base;
+import com.functions.ChangeToInt;
 import com.functions.ProfileCalculator;
 import com.functions.TupperCalc;
 
@@ -44,7 +45,11 @@ public class ConsoleApp {
             System.out.println("10. Account anlegen");
             System.out.println("11. Aufstellung Kalorien");
             System.out.println("12. Tupper essen");
-            System.out.println();
+            System.out.println("13. Zutatenliste");
+            System.out.println("14. Kalorien über Zutaten");
+            System.out.println("15. Zutaten hinzufügen");
+            System.out.println("16. Zusätzliche Kalorien einfügen");
+            System.out.println("-------------------");
             System.out.println("0. Ende");
 
             try {
@@ -87,9 +92,20 @@ public class ConsoleApp {
                         break;
                     case 12:
                         base.EatTupper();
+                    case 13:
+                        base.ListIngridients();
+                        break;
+                    case 14:
+                        base.UseIngridients();
+                        break;
+                    case 15:
+                        base.addIngridient();
+                        break;
+                    case 16:
+                       base.AdditionalCalories();
                 }
             } catch (Exception e) {
-                System.out.println("Falsche Eingabe");
+                System.out.println(e.getMessage());
             }
 
 

@@ -1,8 +1,11 @@
 package com.functions;
 
+import com.SpecialObjects.BMI;
+import com.SpecialObjects.Ingredient;
 import com.con.*;
 import com.fg.Calculator;
 
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -13,27 +16,27 @@ public class Base
 {
     // 0 Konsole, 1, Graphic, 2 Web
     int typeOfUserInterface;
-    LocalDate localDate;
+    int localDate;
     Connect connect;
-    public Base(int TypeOfUserIntercace, LocalDate localDate, Connect connect)
+    public Base(int TypeOfUserInterface, LocalDate localDateDate, Connect connect)
     {
-        this.localDate = localDate;
+        this.localDate = DateCalc.toInt(localDateDate);
         this.connect = connect;
         this.typeOfUserInterface = typeOfUserInterface;
 
     }
     // Set's the weight on a certain amount for a day
     public void UpdateWeight() {
-        String input = "";
+        double input;
         Scanner scanner = new Scanner(System.in);
 
 
         System.out.println("Wie viel Kilogramm haben Sie heute auf der Waage gesehen?");
         System.out.print("Gewicht: ");
-        input = scanner.next();
+        input = scanner.nextDouble();
         try {
-            if (!Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
-                Insert.insertDayWeight(connect.connect(), localDate.toString(), Double.parseDouble(input));
+            if (!Select.SelectFromDayWeight(connect.connect()).containsKey(localDate)) {
+                Insert.insertDayWeight(connect.connect(), localDate, input);
             } else {
                 System.out.println("gibt's schon");
             }
@@ -52,14 +55,13 @@ public class Base
         System.out.print("Kalorien: ");
         input = scanner.next();
         try {
-            if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
-                Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), Double.parseDouble(input));
+            if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate)) {
+                Insert.insertCaloriesOnDay(connect.connect(), localDate, Double.parseDouble(input));
             } else {
 
                 System.out.print("Kalorien hinzufügen[y/n default: y]?");
-                choice = scanner.next();
-                if (choice.equals("y") || choice.equals("")) {
-                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), Double.parseDouble(input));
+                if (Repetitions.choice()) {
+                    Update.UpdateCaloriesOnDay(connect.connect(), localDate, Double.parseDouble(input));
                 }
             }
 
@@ -87,11 +89,7 @@ public class Base
             if (choice.equals("y")) {
 
 
-                if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
-                    Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), calories);
-                } else {
-                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), calories);
-                }
+                Repetitions.CheckCalories(connect,localDate,calories);
             }
             System.out.println("Neue Berechnung? [y/n]");
             choice = scanner.next();
@@ -125,12 +123,11 @@ public class Base
         LinkedList<Double> weightList = new LinkedList<Double>();
         LinkedList<String> nameList = new LinkedList<String>();
         try {
-            if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
+            if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate)) {
 
-                weight = (double) Select.SelectFromDayWeight(connect.connect()).get(localDate.toString());
+                weight = (double) Select.SelectFromDayWeight(connect.connect()).get(localDate);
                 System.out.println("Der für heute eingetragene Wert ist: " + weight + "\nVerwenden?[y/n]");
-                input = scanner.next();
-                if (input.equals("y")) {
+                if (Repetitions.choice()) {
                     weightExistedBefore = true;
                 } else {
                     System.out.print("Neuer Wert: ");
@@ -190,14 +187,13 @@ public class Base
             if(!weightExistedBefore)
             {
                 System.out.println("Gewicht übernehmen?[y/n]");
-                input = scanner.next();
-                if(input.equals("y"))
+                if (Repetitions.choice())
                 {
                     try {
-                        if (!Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
-                            Insert.insertDayWeight(connect.connect(), localDate.toString(),weight);
+                        if (!Select.SelectFromDayWeight(connect.connect()).containsKey(localDate)) {
+                            Insert.insertDayWeight(connect.connect(), localDate,weight);
                         } else {
-                            Update.UpdateDayWeight(connect.connect(),localDate.toString(),weight);
+                            Update.UpdateDayWeight(connect.connect(),localDate,weight);
                         }
 
                     } catch (Exception e) {
@@ -214,8 +210,7 @@ public class Base
                         + "\nPal-Wert: " + pal
                         + "\nEintragen[y/n]"
                 );
-                input = scanner.next();
-                if (input.equals("y")) {
+                if (Repetitions.choice()) {
                     System.out.print("Profil Name: ");
                     profilName = scanner.next();
                     Insert.insertProfile(connect.connect(), profilName, size,pal, age,sex);
@@ -238,11 +233,10 @@ public class Base
         double pal = 0.0;
         double BMI = 0.0;
         try {
-            if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
-                weight = (double)Select.SelectFromDayWeight(connect.connect()).get(localDate.toString());
+            if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate)) {
+                weight = (double)Select.SelectFromDayWeight(connect.connect()).get(localDate);
                 System.out.println("Der für heute eingetragene Wert ist: " + weight + "\nVerwenden?[y/n]");
-                input = scanner.next();
-                if (input.equals("y")) {
+                if (Repetitions.choice()) {
                     weightExistedBefore = true;
                 } else {
                     System.out.print("Neuer Wert: ");
@@ -259,13 +253,12 @@ public class Base
 
             if (!weightExistedBefore) {
                 System.out.println("Gewicht übernehmen?[y/n]");
-                input = scanner.next();
-                if (input.equals("y")) {
+                if (Repetitions.choice()) {
                     try {
-                        if (!Select.SelectFromDayWeight(connect.connect()).containsKey(localDate.toString())) {
-                            Insert.insertDayWeight(connect.connect(), localDate.toString(), weight);
+                        if (!Select.SelectFromDayWeight(connect.connect()).containsKey(localDate)) {
+                            Insert.insertDayWeight(connect.connect(), localDate, weight);
                         } else {
-                            Update.UpdateDayWeight(connect.connect(), localDate.toString(), weight);
+                            Update.UpdateDayWeight(connect.connect(), localDate, weight);
                         }
 
                     } catch (Exception e) {
@@ -332,8 +325,7 @@ public class Base
         while (choice.equals("y"));
         System.out.println("Die Gesamte Mahlzeit hat " + counter + " Kalorien");
         System.out.println("Aufteilen für die Tupper?[y/]");
-        choice = scanner.next();
-        if (choice.equals("y")) {
+        if (Repetitions.choice()){
 
             try {
                 System.out.println("Wie viel haben Sie davon gegessen?");
@@ -345,26 +337,20 @@ public class Base
 
                 System.out.println("Heute haben Sie " + tupperCalories + " Kalorien gegessen. Auf den Tageswert?[y/n]");
 
-                choice = scanner.next();
-                if (choice.equals("y")) {
+                if (Repetitions.choice()){
 
+                    Repetitions.CheckCalories(connect,localDate,tupperCalories);
 
-                    if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
-                        Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), tupperCalories);
-                    } else {
-                        Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), tupperCalories);
-                    }
                 }
                 System.out.println("Den Rest in die Tupper?");
                 choice = scanner.next();
                 if (choice.equals("y")) {
 
-                    Insert.insertTupper(connect.connect(), localDate.toString(), counter, fullweight, tupperweight);
+                    Insert.insertTupper(connect.connect(), localDate, counter, fullweight, tupperweight);
 
                 }
                 System.out.println("Neue Tupper? [y/n]");
-                choice = scanner.next();
-                if (choice.equals("y")) {
+                if (Repetitions.choice()){
                     Tuppern();
                 }
             } catch (Exception e) {
@@ -375,15 +361,10 @@ public class Base
         {
             System.out.println(counter + " Kalorien gegessen auf den Tageswert?[y/n]");
 
-            choice = scanner.next();
-            if (choice.equals("y")) {
+            if (Repetitions.choice()) {
 
+                Repetitions.CheckCalories(connect,localDate,counter);
 
-                if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
-                    Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), counter);
-                } else {
-                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), counter);
-                }
             }
         }
 
@@ -399,15 +380,10 @@ public class Base
             beer = scanner.nextDouble();
             beer = beer * 215.0;
             System.out.println(beer + " Kalorien hinzufügen?[y/n}");
-            choice = scanner.next();
-            if (choice.equals("y")) {
+            if (Repetitions.choice()) {
 
+                Repetitions.CheckCalories(connect,localDate,beer);
 
-                if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
-                    Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), beer);
-                } else {
-                    Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), beer);
-                }
             }
         }
         catch (Exception e)
@@ -417,35 +393,35 @@ public class Base
     }
     public void DifferenceCalories() {
         try {
-            LinkedHashMap<String, Double> calories = Select.SelectFromCaloriesOnDay(connect.connect());
-            LinkedHashMap<String, Double> weight = Select.SelectFromDayWeight(connect.connect());
+            LinkedHashMap<Integer, Double> calories = Select.SelectFromCaloriesOnDay(connect.connect());
+            LinkedHashMap<Integer, Double> weight = Select.SelectFromDayWeight(connect.connect());
             LinkedHashMap<String, double[]> profile = Select.SelectFromprofile(connect.connect());
 
             LinkedList<String> profilList = new LinkedList<String>();
-            LinkedList<String> dateList = new LinkedList<String>();
+            LinkedList<Integer> dateList = new LinkedList<Integer>();
             Scanner scanner = new Scanner(System.in);
             double caloriesOnday = 0.0;
             double difference = 0.0;
             double defizitCounter=0.0;
+            int faildays = 0;
             int profileCounter = 0;
             String input = "";
             int inputInt = 0;
-            String p = "";
+            int p = 0;
             double weightdifference = 0.0;
 
-            for (String i : weight.keySet()) {
+            for (Integer i : weight.keySet()) {
                 if (!calories.containsKey(i)) {
                     System.out.println("Die Berechnung ist nur bei vollständiger Datenlage möglich. Es sind noch keine Kalorien eingetragen");
                     System.out.println("Eintragen?[y/n]");
-                    input = scanner.next();
-                    if (input.equals("y")) {
-                        Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), 0.0);
+                    if (Repetitions.choice()) {
+                        Insert.insertCaloriesOnDay(connect.connect(), localDate, 0.0);
                     } else {
                         return;
                     }
                 }
 
-                for (String k : calories.keySet()) {
+                for (Integer k : calories.keySet()) {
 
                     if (!weight.containsKey(k)) {
                         System.out.println("Die Berechnung ist nur bei vollständiger Datenlage möglich");
@@ -476,9 +452,12 @@ public class Base
             else {
                 inputInt = 0;
             }
+            double dayBMI = 0.0;
             for (int i = 0; i < dateList.size(); i++)
             {
+
                 p = dateList.get(i);
+                dayBMI= Calculator.BMI( profile.get(profilList.get(inputInt))[0],weight.get(p))*10000;
                 caloriesOnday = Calculator.CalorieRequired(weight.get(p), profile.get(profilList.get(inputInt))[0],
                         (int)profile.get(profilList.get(inputInt))[3], (int)profile.get(profilList.get(inputInt))[2],
                         profile.get(profilList.get(inputInt))[1]);
@@ -486,9 +465,13 @@ public class Base
                 // {rs.getDouble("size"), rs.getDouble("pal"), rs.getDouble("age"),rs.getDouble("sex")}
 
                 difference = caloriesOnday - calories.get(p);
-                System.out.println(  p +" \t\t" + s(caloriesOnday) + "\t\t" + s(calories.get(p)) +"\t\t"
-                        + s(difference)+"\t\t\t"+ weight.get(p)+"\t\t"+s(Calculator.BMI( profile.get(profilList.get(inputInt))[0],weight.get(p))*10000));
+                System.out.println(  DateCalc.GermanDate(p) +" \t\t" + s(caloriesOnday) + "\t\t" + s(calories.get(p)) +"\t\t"
+                        + s(difference)+"\t\t\t"+ weight.get(p)+"\t\t"+s(dayBMI));
                 defizitCounter += difference;
+                if(difference < 0)
+                {
+                    faildays++;
+                }
 
 
             }
@@ -498,6 +481,12 @@ public class Base
             System.out.println("Das müssten:" + s(Calculator.calorietoFat(defizitCounter)) + "kg abnahme sein");
             System.out.println("Tatsächlicher Gewichtsverlust: " + s(weightdifference) + "kg" );
             System.out.println("Geschätzter tatsächlicher Pal-Wert: " + s(Calculator.PAL(Calculator.FatToCalories(weightdifference),defizitCounter,profile.get(profilList.get(inputInt))[1])));
+            p("An " + faildays + " Tagen von " + weight.size() + " wurde das Kalorienziel nicht erreicht");
+            for(BMI bmi : Select.SelectBMIAdult(connect.connect()))
+            {
+                p("Grenze zu: " + bmi.Name_0() + ": " + s(Calculator.AimedWeight(profile.get(profilList.get(inputInt))[0],bmi.BMI()/10000))
+                + "kg (BMI von " + bmi.BMI() +")");
+            }
             System.in.read();
         }
 
@@ -546,8 +535,7 @@ public class Base
                 + "\nPal-Wert: " + pal
                 + "\nEintragen[y/n]"
         );
-        input = scanner.next();
-        if (input.equals("y")) {
+        if (Repetitions.choice()){
 
             Insert.insertProfile(connect.connect(), profilName, size,pal, age,sex);
 
@@ -579,15 +567,12 @@ public class Base
                     choice = scanner.next();
                     if(choice.equals("y"))
                     {
-                        if (!Select.SelectFromCaloriesOnDay(connect.connect()).containsKey(localDate.toString())) {
-                            Insert.insertCaloriesOnDay(connect.connect(), localDate.toString(), TupperCalc.CalcTupper(i[0], i[1], i[2]));
-                        } else {
-                            Update.UpdateCaloriesOnDay(connect.connect(), localDate.toString(), TupperCalc.CalcTupper(i[0], i[1], i[2]));
-                        }
+                        Repetitions.CheckCalories(connect,localDate,TupperCalc.CalcTupper(i[0],i[1],i[2]));
+
                     }
                     System.out.println("Tupper löschen? [y/n]");
-                    choice = scanner.next();
-                    if(choice.equals("y"))
+
+                    if (Repetitions.choice())
                     {
                         Delete.DeleteFromTupper(connect.connect(),i[3]);
                     }
@@ -600,6 +585,118 @@ public class Base
             System.out.println(e.getMessage());
         }
     }
+
+    public void addIngridient()
+    {
+        p("Eine neue Zutat hinzufügen?");
+        String choice ="";
+        String name0 = "";
+        String name1 = "";
+        double calories = 0.0;
+        double calorieSum = 0.0;
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+
+
+            if (Repetitions.choice())
+            {
+                p("Deutscher Name?");
+                name0 = scanner.nextLine();
+                p("Englischer Name?");
+                name1 = scanner.nextLine();
+                p("Wie viele Kalorien?");
+                calories = scanner.nextDouble();
+                p("Eintragen?");
+                if (Repetitions.choice())
+                {
+                    if(new Repetitions().getIngredientsContainsName(name0) || new Repetitions().getIngredientsContainsName(name1) )
+                    {
+                        p("Einer der beiden Namen existiert schon. Überschreiben?");
+                        if(Repetitions.choice())
+                        {
+                                Update.UpdateIngridients(connect.connect(), name0,name1,calories,new Repetitions().getIngredientsContainsName(name0));
+
+                        }
+                    }
+                    else {
+                        Insert.insertIntoIngredient(connect.connect(), name0, name1, calories);
+                    }
+                    p("Gleich verwenden?");
+                    if (Repetitions.choice())
+                    {
+                        p("Wieviel Gramm haben Sie gegessen?");
+                        calorieSum = Calculator.Sum(scanner.nextDouble(),new Repetitions().getCaloriesByName(name0));
+                        p("Das sind " + calorieSum + " Kalorien. Eingtragen?");
+                        if(Repetitions.choice())
+                        {Repetitions.CheckCalories(connect,localDate,calorieSum);}
+
+
+                    }
+                }
+
+
+            }
+        }
+        catch (Exception e)
+        {
+            p(e.getMessage());
+        }
+
+    }
+
+    public void ListIngridients()
+    {
+        LinkedList<Ingredient> ingredients = Select.SelectFromIngridient(connect.connect());
+        p("Nummer\t\tName_0\t\tName_1\t\tCalories");
+        for(Ingredient i : ingredients)
+        {
+            p(i.Number() +"\t\t\t" + i.Name_0() + "\t\t" + i.Name_1() + "\t\t" + i.Calories());
+        }
+
+    }
+    public void UseIngridients()
+    {
+        LinkedList<Ingredient> ingredients = Select.SelectFromIngridient(connect.connect());
+        try {
+            String input = "";
+            int number = 0;
+            double gram = 0.0;
+            double calories = 0.0;
+            Scanner scanner = new Scanner(System.in);
+            do {
+                ListIngridients();
+                p("Welche Nummer?");
+                number = scanner.nextInt();
+                p("Wieviel wurde gegessen?");
+                gram = scanner.nextDouble();
+                calories = Calculator.Sum(gram, ingredients.get(number).Calories());
+                p("Das sind " + calories + " Kalorien. Hinzufügen?");
+                if(Repetitions.choice())
+                {
+                    Repetitions.CheckCalories(connect, localDate, calories);
+                }
+                p("Neuer Eintrag?");
+                input = scanner.next();
+            }
+            while (input.equals("y"));
+        }
+        catch (Exception e)
+        {
+            p(e.getMessage());
+        }
+
+    }
+    public void AdditionalCalories()
+    {
+        Scanner scanner = new Scanner(System.in);
+        p("KalorienVerbrauch hinzufügen?");
+        if(Repetitions.choice())
+        {
+            Repetitions.CheckAdditionalCalories(connect,localDate,scanner.nextDouble());
+        }
+    }
+
     //shorter doubles
     public static String s(double t)
     {
@@ -613,5 +710,10 @@ public class Base
             shorter = shorter.substring(0,shorter.indexOf(",") +2 );
         }
         return shorter;
+    }
+    // Takes Strings to change it dependend from console or gui
+    public static void p(String s)
+    {
+        System.out.println(s);
     }
 }

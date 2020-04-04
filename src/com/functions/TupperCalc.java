@@ -5,7 +5,7 @@ public class TupperCalc {
     {
         double calc=0.0;
         calc = calories / fullweight;
-        calc = calc * tupperweight;
+        calc = calc * (fullweight - tupperweight);
 
         return calc;
     }
