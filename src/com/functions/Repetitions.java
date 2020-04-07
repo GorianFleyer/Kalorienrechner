@@ -111,4 +111,14 @@ public class Repetitions
             Update.UpdateAdditionalCalories(connect.connect(), localDate, calories);
         }
     }
+    public static void ListIngridients(Connect connect)
+    {
+        LinkedList<Ingredient> ingredients = Select.SelectFromIngridient(connect.connect());
+        p("Nummer\t\tName_0\t\tName_1\t\tCalories");
+        for(Ingredient i : ingredients)
+        {
+            p(i.Number() +"\t\t\t" + i.Name_0() + "\t\t" + i.Name_1() + "\t\t" + i.Calories());
+        }
+
+    }
 }

@@ -1,7 +1,9 @@
 package com.functions;
 
 import com.SpecialObjects.BMI;
+import com.SpecialObjects.FullRecipe;
 import com.SpecialObjects.Ingredient;
+import com.SpecialObjects.Recipe;
 import com.con.*;
 import com.fg.Calculator;
 
@@ -49,7 +51,6 @@ public class Base
     // Adds plain calories to the daily  amount
     public void UpdateCalories() {
         String input = "";
-        String choice = "y";
         Scanner scanner = new Scanner(System.in);
         System.out.println("Wie viel Kalorien haben Sie gegessen?");
         System.out.print("Kalorien: ");
@@ -107,7 +108,6 @@ public class Base
     public void CalcCalorie() {
         Scanner scanner = new Scanner(System.in);
         boolean weightExistedBefore = false;
-        String input = "";
         String profilName = "";
         double weight = 0.0;
         double size = 0.0;
@@ -225,12 +225,8 @@ public class Base
     public void BMIBerechnen() {
         Scanner scanner = new Scanner(System.in);
         boolean weightExistedBefore = false;
-        String input = "";
         double weight = 0.0;
         double size = 0.0;
-        int age = 0;
-        int sex = 1;
-        double pal = 0.0;
         double BMI = 0.0;
         try {
             if (Select.SelectFromDayWeight(connect.connect()).containsKey(localDate)) {
@@ -275,17 +271,17 @@ public class Base
     // Lists the Calorie Input on all input dates
     public void ListCalories()
     {
-        LinkedHashMap<String, Double> temp = Select.SelectFromCaloriesOnDay(connect.connect());
-        for (String i : temp.keySet()) {
-            System.out.println("Datum: " + i + " Kalorien: " + temp.get(i));
+        LinkedHashMap<Integer, Double> temp = Select.SelectFromCaloriesOnDay(connect.connect());
+        for (Integer i : temp.keySet()) {
+            System.out.println("Datum: " + DateCalc.GermanDate(i) + " Kalorien: " + temp.get(i));
         }
     }
     // Lists the Weight on all input dates
     public void ListWeight()
     {
-        LinkedHashMap<String, Double> temp = Select.SelectFromDayWeight(connect.connect());
-        for (String i : temp.keySet()) {
-            System.out.println("Datum: " + i + " Gewicht: " + temp.get(i));
+        LinkedHashMap<Integer, Double> temp = Select.SelectFromDayWeight(connect.connect());
+        for (Integer i : temp.keySet()) {
+            System.out.println("Datum: " + DateCalc.GermanDate(i) + " Gewicht: " + temp.get(i));
         }
     }
     public void Tuppern()
@@ -373,7 +369,6 @@ public class Base
     public void Beer()
     {
         double beer;
-        String choice ="";
         Scanner scanner = new Scanner(System.in);
         System.out.println("Wie viel Bier?");
         try{
@@ -405,7 +400,6 @@ public class Base
             double defizitCounter=0.0;
             int faildays = 0;
             int profileCounter = 0;
-            String input = "";
             int inputInt = 0;
             int p = 0;
             double weightdifference = 0.0;
@@ -499,7 +493,7 @@ public class Base
     {
         Scanner scanner = new Scanner(System.in);
 
-        String input = "";
+
         String profilName = "";
 
         double size = 0.0;
@@ -644,33 +638,27 @@ public class Base
         }
 
     }
+    public void ListIngridients() {
 
-    public void ListIngridients()
-    {
-        LinkedList<Ingredient> ingredients = Select.SelectFromIngridient(connect.connect());
-        p("Nummer\t\tName_0\t\tName_1\t\tCalories");
-        for(Ingredient i : ingredients)
-        {
-            p(i.Number() +"\t\t\t" + i.Name_0() + "\t\t" + i.Name_1() + "\t\t" + i.Calories());
-        }
-
+        Repetitions.ListIngridients(connect);
     }
     public void UseIngridients()
     {
         LinkedList<Ingredient> ingredients = Select.SelectFromIngridient(connect.connect());
         try {
             String input = "";
-            int number = 0;
+
             double gram = 0.0;
             double calories = 0.0;
             Scanner scanner = new Scanner(System.in);
             do {
-                ListIngridients();
+                Repetitions.ListIngridients(connect);
+                int number = 0;
                 p("Welche Nummer?");
                 number = scanner.nextInt();
-                p("Wieviel wurde gegessen?");
+                p("Wieviel wurde gegessen? ("+ ingredients.get(number-1).Calories() + " " +ingredients.get(number-1).Name_0() );
                 gram = scanner.nextDouble();
-                calories = Calculator.Sum(gram, ingredients.get(number).Calories());
+                calories = Calculator.Sum(gram, ingredients.get(number-1).Calories());
                 p("Das sind " + calories + " Kalorien. Hinzufügen?");
                 if(Repetitions.choice())
                 {
@@ -696,6 +684,44 @@ public class Base
             Repetitions.CheckAdditionalCalories(connect,localDate,scanner.nextDouble());
         }
     }
+    public void AddRecipe()
+    {
+        RecipeFunctions rf = new RecipeFunctions(connect);
+        rf.CreateRecipe(localDate);
+    }
+    public void UseRecipe()
+    {
+        Scanner scanner = new Scanner(System.in);
+        int in;
+        if(q("Rezept verwenden?"))
+        {
+            LinkedList<Recipe> recipes = Select.SelectFromRecipe(connect.connect());
+            p("Nummer\t\tDeutscher Name\\Englischer Name");
+            for(Recipe recipe : recipes)
+            {
+                p(recipe.Number() + "\t\t" + recipe.Name_0() +"\t\t" + recipe.Name_1());
+            }
+            p("Welches der vielen?");
+            in = scanner.nextInt();
+            FullRecipe fr = new RecipeFunctions(connect).getFullRecipe(in);
+            p(fr.Recipe().Name_0() + " auf Englisch " + fr.Recipe().Name_1());
+            p("Deutscher Name Englischer Name Gram");
+            for(Ingredient i : fr.Ingredients().keySet())
+            {
+                p(i.Name_0() + " " +i.Name_0() +" " + fr.Ingredients().get(i));
+            }
+            for(String s : fr.Comments())
+            {
+                p(s);
+            }
+            p("Gesamtkalorien: " + fr.RecipeCalories());
+            if(q("Auf die Tageskalorien?"))
+            {
+                Repetitions.CheckCalories(connect,localDate,fr.RecipeCalories());
+            }
+
+        }
+    }
 
     //shorter doubles
     public static String s(double t)
@@ -711,9 +737,15 @@ public class Base
         }
         return shorter;
     }
+
     // Takes Strings to change it dependend from console or gui
     public static void p(String s)
     {
         System.out.println(s);
+    }
+    public static boolean q(String s)
+    {
+        System.out.println(s);
+        return Repetitions.choice();
     }
 }

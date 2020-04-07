@@ -49,6 +49,8 @@ public class ConsoleApp {
             System.out.println("14. Kalorien über Zutaten");
             System.out.println("15. Zutaten hinzufügen");
             System.out.println("16. Zusätzliche Kalorien einfügen");
+            System.out.println("17. Rezept anlegen");
+            System.out.println("18. Rezept verwenden");
             System.out.println("-------------------");
             System.out.println("0. Ende");
 
@@ -103,6 +105,13 @@ public class ConsoleApp {
                         break;
                     case 16:
                        base.AdditionalCalories();
+                       break;
+                    case 17:
+                        base.AddRecipe();
+                        break;
+                    case 18:
+                        base.UseRecipe();
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());

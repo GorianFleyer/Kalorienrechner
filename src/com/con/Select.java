@@ -2,6 +2,7 @@ package com.con;
 
 import com.SpecialObjects.BMI;
 import com.SpecialObjects.Ingredient;
+import com.SpecialObjects.Recipe;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,26 +11,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Select {
-    public static void SelectFromIngridients(Connection conn) {
-        String sql = "SELECT name_0, name_1, calories "
-                + "FROM ingridient";
-        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            ResultSet rs = preparedStatement.executeQuery();
 
-
-            while (rs.next()) {
-                System.out.println(rs.getString("name_0") + "\t"
-                        + rs.getString("name_1") + "\t" + rs.getDouble("calories"));
-
-            }
-
-        } catch (SQLException sq) {
-            System.out.println(sq.getMessage());
-
-        }
-
-
-    }
     public static LinkedHashMap SelectFromDayWeight(Connection conn) {
         String sql = "SELECT dateInt, weight "
                 + "FROM DayWeight";
@@ -80,7 +62,7 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
-            int listCount = 0;
+
             while (rs.next()) {
 
                 double[] temp = {rs.getDouble("calories"), rs.getDouble("fullweight"), rs.getDouble("tupperweight"), rs.getDouble("ID")};
@@ -147,7 +129,7 @@ public class Select {
     }
 
     public static LinkedList<Ingredient>  SelectFromIngridient(Connection conn) {
-        String sql = "SELECT name_0, name_1, calories  "
+        String sql = "SELECT name_0, name_1, calories, ID  "
                 + "FROM ingridient order by ID";
 
 
@@ -156,12 +138,12 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
-            int count = 0;
+
             while (rs.next()) {
 
 
-                ingridients.add(new Ingredient(count,rs.getString(1),rs.getString(2),rs.getDouble(3)));
-                count++;
+                ingridients.add(new Ingredient(rs.getInt(4),rs.getString(1),rs.getString(2),rs.getDouble(3)));
+
 
             }
 
@@ -192,5 +174,97 @@ public class Select {
         }
         return BMIs;
 
+    }
+    public static LinkedList<Recipe> SelectFromRecipe(Connection conn)
+    {
+        String sql = "SELECT name_0, name_1, ID "
+                + "FROM recipe order by ID";
+
+        LinkedList<Recipe> recipes = new LinkedList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+                recipes.add(new Recipe(rs.getInt(3),rs.getString(1),rs.getString(2)));
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return recipes;
+    }
+    public static Recipe SelectSingleRecipe(Connection conn, int ID)
+    {
+        String sql = "SELECT name_0, name_1, ID "
+                + "FROM recipe where ID =" + ID;
+
+        Recipe recipe = new Recipe(0,"","");
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+                recipe = new Recipe(rs.getInt(3),rs.getString(1),rs.getString(2));
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return recipe;
+    }
+    public static LinkedHashMap<Ingredient, Double> SelectIngredientRecipe(Connection conn, int ID)
+    {
+        String sql = "SELECT ingridient.id, ingridient.name_0, ingridient.name_1, ingridient.calories, refIngredientRecipe.amount "
+                + "FROM refIngredientRecipe  "
+                + "INNER JOIN ingridient ON ingridient.ID = refIngredientRecipe.fk_ingredient "
+                + "where refIngredientRecipe.fk_recipe = " + ID;
+
+
+        LinkedHashMap<Ingredient,Double> temp = new LinkedHashMap<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+
+                temp.put(new Ingredient(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4)),rs.getDouble(5));
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return temp;
+    }
+    public static LinkedList<String> SelectRefRecipeComment(Connection conn, int ID)
+    {
+        String sql = "SELECT rC.comment "
+                + "FROM recipe r "
+                + "INNER JOIN refRecipeComment rC ON r.ID = rC.fk_recipe "
+                + "where rC.fk_recipe = " + ID;
+
+
+        LinkedList<String> temp = new LinkedList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+
+                temp.add(rs.getString(1));
+
+            }
+
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return temp;
     }
 }
