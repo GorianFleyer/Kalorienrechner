@@ -722,6 +722,11 @@ public class Base
 
         }
     }
+    public void TupperRecipe()
+    {
+        Tupper tupper = new Tupper(false,localDate,1,connect);
+        tupper.TupperRecipe();
+    }
 
     //shorter doubles
     public static String s(double t)
@@ -737,6 +742,7 @@ public class Base
         }
         return shorter;
     }
+
 
     // Takes Strings to change it dependend from console or gui
     public static void p(String s)

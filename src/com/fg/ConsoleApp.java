@@ -51,6 +51,7 @@ public class ConsoleApp {
             System.out.println("16. Zusätzliche Kalorien einfügen");
             System.out.println("17. Rezept anlegen");
             System.out.println("18. Rezept verwenden");
+            System.out.println("19. Rezept tuppern");
             System.out.println("-------------------");
             System.out.println("0. Ende");
 
@@ -112,6 +113,8 @@ public class ConsoleApp {
                     case 18:
                         base.UseRecipe();
                         break;
+                    case 19:
+                        base.TupperRecipe();
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
