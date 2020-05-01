@@ -52,6 +52,8 @@ public class ConsoleApp {
             System.out.println("17. Rezept anlegen");
             System.out.println("18. Rezept verwenden");
             System.out.println("19. Rezept tuppern");
+            System.out.println("20. Nachtragen");
+            System.out.println("21. Datum zurücksetzen");
             System.out.println("-------------------");
             System.out.println("0. Ende");
 
@@ -115,6 +117,13 @@ public class ConsoleApp {
                         break;
                     case 19:
                         base.TupperRecipe();
+                        break;
+                    case 20:
+                        base.addToOldEntries();
+                        break;
+                    case 21:
+                        base.SetDateBack();
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());

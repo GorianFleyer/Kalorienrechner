@@ -28,4 +28,19 @@ public class DateCalc
         return temp;
 
     }
+    public static int RevertGermanDate(String germanDate)
+    {
+        int temp = 0;
+        germanDate = germanDate.substring(6)+ germanDate.substring(3,5) + germanDate.substring(0,2);
+        try
+        {
+            temp = Integer.parseInt(germanDate);
+        }catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        return temp;
+
+    }
 }

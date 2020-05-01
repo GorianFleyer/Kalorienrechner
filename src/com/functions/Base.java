@@ -9,15 +9,13 @@ import com.fg.Calculator;
 
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Base
 {
     // 0 Konsole, 1, Graphic, 2 Web
     int typeOfUserInterface;
+    int dateTemp;
     int localDate;
     Connect connect;
     public Base(int TypeOfUserInterface, LocalDate localDateDate, Connect connect)
@@ -33,7 +31,7 @@ public class Base
         Scanner scanner = new Scanner(System.in);
 
 
-        System.out.println("Wie viel Kilogramm haben Sie heute auf der Waage gesehen?");
+        System.out.println("Wie viel Kilogramm haben Sie am " + DateCalc.GermanDate(localDate) +" auf der Waage gesehen?");
         System.out.print("Gewicht: ");
         input = scanner.nextDouble();
         try {
@@ -52,7 +50,7 @@ public class Base
     public void UpdateCalories() {
         String input = "";
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Wie viel Kalorien haben Sie gegessen?");
+        System.out.println("Wie viel Kalorien haben Sie am "+ DateCalc.GermanDate(localDate) + " gegessen?");
         System.out.print("Kalorien: ");
         input = scanner.next();
         try {
@@ -678,7 +676,7 @@ public class Base
     public void AdditionalCalories()
     {
         Scanner scanner = new Scanner(System.in);
-        p("KalorienVerbrauch hinzufügen?");
+        p("KalorienVerbrauch für "+DateCalc.GermanDate(localDate)+" hinzufügen?");
         if(Repetitions.choice())
         {
             Repetitions.CheckAdditionalCalories(connect,localDate,scanner.nextDouble());
@@ -742,7 +740,27 @@ public class Base
         }
         return shorter;
     }
+    public void addToOldEntries()
+    {
+        String date = "";
+        dateTemp = localDate;
+        Scanner scanner = new Scanner(System.in);
+        p("Welches Datum?");
+        date = scanner.nextLine();
+        p(DateCalc.RevertGermanDate(date) + "");
+        if(q("Datum wirklih umsetzen?")){
+            localDate = DateCalc.RevertGermanDate(date);
 
+        }
+    }
+    public void SetDateBack()
+    {
+        if(q("Datum wieder zurücksetzen?"))
+        {
+            localDate = dateTemp;
+        }
+        p("Datum ist jetzt " +DateCalc.GermanDate(localDate));
+    }
 
     // Takes Strings to change it dependend from console or gui
     public static void p(String s)

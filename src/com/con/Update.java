@@ -26,7 +26,7 @@ public class Update
     }
     public static void UpdateDayWeight(Connection conn, int date, double weight)
     {
-        String sql = "UPDATE DayWeight SET weight = ? WHERE dateInt = ?)";
+        String sql = "UPDATE DayWeight SET weight = ? WHERE dateInt = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql))
         {
