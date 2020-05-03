@@ -25,9 +25,16 @@ public class Menu extends JMenuBar {
                 System.exit(0);
             }
         });
+        JMenuItem item2 = new JMenuItem("Ende");
+        item2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.exit(0);
+            }
+        });
         submenu.add(item1);
-
         file.add(submenu);
+        file.add(item2);
         file.addSeparator();
         add(file);
 

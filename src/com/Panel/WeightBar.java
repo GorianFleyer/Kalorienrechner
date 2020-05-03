@@ -25,16 +25,24 @@ public class WeightBar extends JPanel {
         this.connect = connect;
         this.localDate = localdate;
         setLayout(new FlowLayout());
-
-        String labeltext = "Gewicht am " + DateCalc.GermanDate(localDate) + "noch nicht gesetzt.";
-        String buttonText = "Gewicht eintragen";
-        String textFieldText = "";
-        if(weightCheck())
+        /*final String msg = num > 10
+  ? "Number is greater than 10"
+  : "Number is less than or equal to 10";*/
+       final String labeltext = !weightCheck()
+              ? "Gewicht am " + DateCalc.GermanDate(localDate) + "noch nicht gesetzt."
+               : "Gewicht für " + DateCalc.GermanDate(localDate) + " wurde schon gesetzt.";
+        final String buttonText = !weightCheck()
+                ?"Gewicht eintragen"
+                :"Gewicht updaten";
+        String textFieldText = !weightCheck()
+        ?""
+         : Select.SelectFromDayWeight(connect.connect()).get(localDate).toString();
+  /*      if(weightCheck())
         {
             labeltext = "Gewicht für " + DateCalc.GermanDate(localDate) + " wurde schon gesetzt.";
             buttonText = "Gewicht updaten";
             textFieldText = Select.SelectFromDayWeight(connect.connect()).get(localDate).toString();
-        }
+        }*/
 
         label = new JLabel(labeltext);
         button = new JButton(buttonText);

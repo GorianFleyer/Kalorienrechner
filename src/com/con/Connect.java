@@ -15,7 +15,7 @@ public class Connect
             String url = "jdbc:sqlite:database/database";
             conn = DriverManager.getConnection(url);
         }
-        catch (SQLException e)
+        catch (SQLException  e)
         {
             System.out.println(e.getMessage());
         }
