@@ -1,13 +1,9 @@
 package com.fg;
 
-import com.con.*;
+import com.connection.*;
 import com.functions.Base;
-import com.functions.ChangeToInt;
-import com.functions.ProfileCalculator;
 import com.functions.TupperCalc;
 
-import java.sql.Connection;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.*;
 

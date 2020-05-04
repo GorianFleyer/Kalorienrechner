@@ -3,8 +3,8 @@ package com.functions;
 import com.SpecialObjects.FullRecipe;
 import com.SpecialObjects.Ingredient;
 import com.SpecialObjects.Recipe;
-import com.con.Connect;
-import com.con.Select;
+import com.connection.Connect;
+import com.connection.Select;
 
 import java.util.LinkedList;
 import java.util.Scanner;

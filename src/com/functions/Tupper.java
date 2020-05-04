@@ -1,7 +1,7 @@
 package com.functions;
 
-import com.con.Connect;
-import com.con.Insert;
+import com.connection.Connect;
+import com.connection.Insert;
 import com.fg.Calculator;
 
 import java.util.Scanner;

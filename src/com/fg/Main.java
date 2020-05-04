@@ -1,15 +1,9 @@
 package com.fg;
 
 import com.Panel.MainFrame;
-import com.con.Connect;
-import com.con.Insert;
-import com.con.Select;
 
 import java.awt.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Scanner;
 
 public class Main {
 

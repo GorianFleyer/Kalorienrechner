@@ -1,12 +1,9 @@
 package com.functions;
 
-import com.con.Connect;
-import com.con.Insert;
-import com.con.Select;
+import com.connection.Connect;
+import com.connection.Insert;
+import com.connection.Select;
 import com.fg.Calculator;
-
-import java.sql.Connection;
-import java.time.LocalDate;
 
 public class ProfileCalculator {
 

@@ -1,4 +1,4 @@
-package com.con;
+package com.connection;
 
 import com.SpecialObjects.BMI;
 import com.SpecialObjects.Ingredient;

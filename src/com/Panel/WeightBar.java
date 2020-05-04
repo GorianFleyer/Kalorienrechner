@@ -1,18 +1,15 @@
 package com.Panel;
 
-import com.con.Connect;
-import com.con.Insert;
-import com.con.Select;
-import com.con.Update;
+import com.connection.Connect;
+import com.connection.Insert;
+import com.connection.Select;
+import com.connection.Update;
 import com.functions.DateCalc;
-import jdk.jfr.Percentage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.text.DecimalFormat;
 
 public class WeightBar extends JPanel {
     Connect connect;

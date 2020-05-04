@@ -1,10 +1,10 @@
 package com.Panel;
 
 import com.SpecialObjects.Ingredient;
-import com.con.Connect;
-import com.con.Delete;
-import com.con.Insert;
-import com.con.Select;
+import com.connection.Connect;
+import com.connection.Delete;
+import com.connection.Insert;
+import com.connection.Select;
 import com.functions.DateCalc;
 import com.functions.Repetitions;
 import com.functions.TupperCalc;

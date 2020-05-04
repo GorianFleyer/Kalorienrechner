@@ -3,13 +3,10 @@ package com.functions;
 import com.SpecialObjects.FullRecipe;
 import com.SpecialObjects.Ingredient;
 import com.SpecialObjects.Recipe;
-import com.con.Connect;
-import com.con.Insert;
-import com.con.Select;
+import com.connection.Connect;
+import com.connection.Insert;
+import com.connection.Select;
 
-import javax.swing.*;
-import java.sql.Connection;
-import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Scanner;

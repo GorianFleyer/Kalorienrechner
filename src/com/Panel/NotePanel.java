@@ -1,6 +1,6 @@
 package com.Panel;
 
-import com.con.Connect;
+import com.connection.Connect;
 
 import javax.swing.*;
 import java.awt.event.FocusEvent;

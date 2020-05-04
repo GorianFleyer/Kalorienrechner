@@ -1,13 +1,10 @@
 package com.Panel;
 
-import com.con.Connect;
-import com.functions.DateCalc;
+import com.connection.Connect;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.time.LocalDate;
 
 public class Menu extends JMenuBar {
     int localDate;
