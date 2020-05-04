@@ -17,8 +17,8 @@ public class BeerPanel extends JPanel {
     JSlider jSlider;
     JButton beerbutton;
     int value;
-    public BeerPanel(int localdate, Connect connect)
-    {
+
+    public BeerPanel(int localdate, Connect connect) {
         this.connect = connect;
         this.localdate = localdate;
         value = 0;
@@ -27,10 +27,10 @@ public class BeerPanel extends JPanel {
         beerbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-            beerAction();
+                beerAction();
             }
         });
-        jSlider = new JSlider(-10,20,value);
+        jSlider = new JSlider(-10, 20, value);
         jSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
@@ -44,8 +44,8 @@ public class BeerPanel extends JPanel {
         add(beerbutton);
 
     }
-    public void beerAction()
-    {
+
+    public void beerAction() {
         double beerCal = 0.0;
         beerCal = value * 215.0;
         JFrame frame = new JFrame();
@@ -54,19 +54,16 @@ public class BeerPanel extends JPanel {
         options[1] = new String("Nicht eintragen");
         options[2] = new String("Nur zählen");
         options[3] = new String("Promille berechnen");
-        int dialog = JOptionPane.showOptionDialog(frame.getContentPane(),"Das wären "+beerCal+" Kalorien! Hinzufügen?","Beerzähler",
-                0,JOptionPane.YES_NO_CANCEL_OPTION,null,options,null);
-        if(dialog == 0)
-            {
+        int dialog = JOptionPane.showOptionDialog(frame.getContentPane(), "Das wären " + beerCal + " Kalorien! Hinzufügen?", "Beerzähler",
+                0, JOptionPane.YES_NO_CANCEL_OPTION, null, options, null);
+        if (dialog == 0) {
             try {
-                Repetitions.CheckCalories(connect,localdate,beerCal);
+                Repetitions.CheckCalories(connect, localdate, beerCal);
                 JOptionPane.showMessageDialog(null, "Ok");
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
 
-            }
+        }
     }
 }

@@ -20,10 +20,11 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
+                    hashMap.put(rs.getInt("dateInt"), rs.getDouble("weight"));
 
-            while (rs.next()) {
-               hashMap.put(rs.getInt("dateInt"),rs.getDouble("weight"));
-
+                }
             }
 
         } catch (SQLException sq) {
@@ -41,12 +42,12 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
+                    hashMap.put(rs.getInt("dateInt"), rs.getDouble("calorie"));
 
-            while (rs.next()) {
-                hashMap.put(rs.getInt("dateInt"),rs.getDouble("calorie"));
-
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -62,14 +63,14 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
 
-            while (rs.next()) {
-
-                double[] temp = {rs.getDouble("calories"), rs.getDouble("fullweight"), rs.getDouble("tupperweight"), rs.getDouble("ID")};
-                tupperList.add(temp);
+                    double[] temp = {rs.getDouble("calories"), rs.getDouble("fullweight"), rs.getDouble("tupperweight"), rs.getDouble("ID")};
+                    tupperList.add(temp);
 
 
-
+                }
             }
 
         } catch (SQLException sq) {
@@ -88,16 +89,16 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
 
-            while (rs.next()) {
+                    double[] temp = {rs.getDouble("size"), rs.getDouble("pal"), rs.getDouble("age"), rs.getDouble("sex")};
 
-                double[] temp = {rs.getDouble("size"), rs.getDouble("pal"), rs.getDouble("age"),rs.getDouble("sex")};
-
-                profile.put(rs.getString("login"), temp);
+                    profile.put(rs.getString("login"), temp);
 
 
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -114,12 +115,12 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
+                    additionalCalories.put(rs.getInt(1), rs.getDouble(2));
 
-            while (rs.next()) {
-                additionalCalories.put(rs.getInt(1),rs.getDouble(2));
-
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -138,15 +139,15 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
-
-            while (rs.next()) {
-
-
-                ingridients.add(new Ingredient(rs.getInt(4),rs.getString(1),rs.getString(2),rs.getDouble(3)));
+            if(rs != null) {
+                while (rs.next()) {
 
 
+                    ingridients.add(new Ingredient(rs.getInt(4), rs.getString(1), rs.getString(2), rs.getDouble(3)));
+
+
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -162,12 +163,12 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
+                    BMIs.add(new BMI(rs.getString(1), rs.getString(2), rs.getDouble(3)));
 
-            while (rs.next()) {
-                BMIs.add(new BMI(rs.getString(1),rs.getString(2),rs.getDouble(3)));
-
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -184,12 +185,12 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
+                    recipes.add(new Recipe(rs.getInt(3), rs.getString(1), rs.getString(2)));
 
-            while (rs.next()) {
-                recipes.add(new Recipe(rs.getInt(3),rs.getString(1),rs.getString(2)));
-
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -205,12 +206,12 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
+                    recipe = new Recipe(rs.getInt(3), rs.getString(1), rs.getString(2));
 
-            while (rs.next()) {
-                recipe = new Recipe(rs.getInt(3),rs.getString(1),rs.getString(2));
-
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -229,13 +230,13 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
 
-            while (rs.next()) {
+                    temp.put(new Ingredient(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDouble(4)), rs.getDouble(5));
 
-                temp.put(new Ingredient(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4)),rs.getDouble(5));
-
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
@@ -254,17 +255,39 @@ public class Select {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
 
+            if(rs != null) {
+                while (rs.next()) {
 
-            while (rs.next()) {
+                    temp.add(rs.getString(1));
 
-                temp.add(rs.getString(1));
-
+                }
             }
-
         } catch (SQLException sq) {
             System.out.println(sq.getMessage());
 
         }
         return temp;
+    }
+    public static LinkedList<String> SelectNotepad(Connection conn)
+    {
+        String sql = "SELECT notelLine "
+                + "FROM NotePads ";
+
+        LinkedList<String> notes = new LinkedList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            if(rs != null) {
+                while (rs.next()) {
+                    notes.add(rs.getString("noteLine"));
+
+                }
+            }
+        } catch (SQLException sq) {
+            System.out.println(sq.getMessage());
+
+        }
+        return notes;
     }
 }

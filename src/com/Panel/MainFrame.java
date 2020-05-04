@@ -19,7 +19,7 @@ public class MainFrame extends JFrame
         setSize(600,800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(2,1));
+        setLayout(new FlowLayout());
         Container pane = getContentPane();
 
         //Panels

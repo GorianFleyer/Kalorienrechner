@@ -29,15 +29,22 @@ public class RecipeBar extends JPanel {
     String[] columnNamesTupper;
     String[][] tableDataIngredients;
     Double[][] tableDataTupper;
-    JButton addToCalories;
-    JButton tupper;
-    JButton eatTupper;
+    JButton addToCaloriesButton;
+    JButton tupperButton;
+    JButton eatTupperButton;
     JTextField tfFullCalories;
     JTextField tfEaten;
     JTextField tfTuppered;
+    JLabel tupperLabelTuppered;
+    JLabel tupperLabelEaten;
+    JLabel caloriesLabel;
     double fullCalories;
     public RecipeBar(int localdate, Connect connect)
     {
+        caloriesLabel = new JLabel("gegessene Kalorien");
+        tupperLabelEaten = new JLabel("Gramm gegessen");
+        tupperLabelTuppered = new JLabel("Gram getuppert");
+
         fullCalories = 0.0;
         setLayout(new FlowLayout());
         this.connect = connect;
@@ -51,22 +58,22 @@ public class RecipeBar extends JPanel {
                 testbutton();
             }
         });
-        addToCalories = new JButton("Zu den Tageskalorien");
-        addToCalories.addActionListener(new ActionListener() {
+        addToCaloriesButton = new JButton("Zu den Tageskalorien");
+        addToCaloriesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 addCalorieAction();
             }
         });
-        tupper = new JButton("Eintuppern");
-        tupper.addActionListener(new ActionListener() {
+        tupperButton = new JButton("Eintuppern");
+        tupperButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 tupperAction();
             }
         });
-        eatTupper = new JButton("Tupper essen");
-        eatTupper.addActionListener(new ActionListener() {
+        eatTupperButton = new JButton("Tupper essen");
+        eatTupperButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 eatTupperAction();
@@ -134,20 +141,44 @@ public class RecipeBar extends JPanel {
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 
-
+//         label.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+//    textField.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        tupperLabelTuppered.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        tfTuppered.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        tupperLabelEaten.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        tfEaten.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        caloriesLabel.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        tfFullCalories.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        JPanel calPanel = new JPanel();
+        JPanel tupperEatenPanel = new JPanel();
+        JPanel tupperedPanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
+        JPanel textfields = new JPanel();
+        textfields.setLayout(new GridLayout(4,1));
         JScrollPane scrollPaneRecipe = new JScrollPane(tableIngredients);
         JScrollPane scrollPaneTupper = new JScrollPane(tableTupper);
-        scrollPaneRecipe.setMaximumSize(new Dimension(800,200));
+        calPanel.add(caloriesLabel);
+        calPanel.add(tfFullCalories);
+        tupperEatenPanel.add(tupperLabelEaten);
+        tupperEatenPanel.add(tfEaten);
+        tupperedPanel.add(tupperLabelTuppered);
+        tupperedPanel.add(tfTuppered);
+        buttonPanel.add(addToCaloriesButton);
+        buttonPanel.add(tupperButton);
+        buttonPanel.add(eatTupperButton);
         add(scrollPaneRecipe);
-
-        add(tfFullCalories);
-        add(tfEaten);
-        add(tfTuppered);
-        add(addToCalories);
-        add(tupper);
-        add(testbutton);
         add(scrollPaneTupper);
-        add(eatTupper);
+        textfields.add(tupperEatenPanel);
+        textfields.add(tupperedPanel);
+        textfields.add(calPanel);
+
+        add(textfields);
+        add(buttonPanel);
+
+
+
+      //  add(testbutton);
+
 
 
     }

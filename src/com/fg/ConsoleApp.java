@@ -18,17 +18,25 @@ public class ConsoleApp {
         int scan = 0;
         Scanner scanner = new Scanner(System.in);
 
-        List<double[]> tupper = Select.SelectFromTupper(connect.connect());
-        for (double[] i:tupper) {
-            System.out.println("Tupper mit " + i[0] + "Kalorien auf " + i[1] + "g enthält noch " + i[2] + " Gramm" );
-            System.out.println("Das sind " + TupperCalc.CalcTupper(i[0],i[1],i[2]) + " Kalorien");
+        try {
+            List<double[]> tupper = Select.SelectFromTupper(connect.connect());
+            if(!tupper.isEmpty()) {
+                for (double[] i : tupper) {
+                    System.out.println("Tupper mit " + i[0] + "Kalorien auf " + i[1] + "g enthält noch " + i[2] + " Gramm");
+                    System.out.println("Das sind " + TupperCalc.CalcTupper(i[0], i[1], i[2]) + " Kalorien");
 
+                }
+            }
+            LinkedHashMap<String, double[]> profile = Select.SelectFromprofile(connect.connect());
+            for (String i : profile.keySet()) {
+                System.out.println("Eingetragenes Profil: " + i + " Größe: " + profile.get(i)[0]);
+                System.out.println("Pal-Wert: " + profile.get(i)[1] + "\nAlter: " + profile.get(i)[2]);
+
+            }
         }
-        LinkedHashMap<String, double[]>  profile = Select.SelectFromprofile(connect.connect());
-        for (String i : profile.keySet()) {
-            System.out.println("Eingetragenes Profil: " + i + " Größe: " + profile.get(i)[0]);
-            System.out.println("Pal-Wert: " +profile.get(i)[1] + "\nAlter: " + profile.get(i)[2]);
-
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
         }
         do {
             System.out.println("Kalorienrechner Hauptmenue");
